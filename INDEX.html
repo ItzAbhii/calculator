@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ultimate Calculator Game</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0e0e0e;
+      color: white;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-top: 40px;
+      text-shadow: 0 0 10px #00ffff;
+    }
+    .menu {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 80%;
+      max-width: 400px;
+    }
+    button {
+      background: #111;
+      color: white;
+      border: 2px solid #00ffff;
+      padding: 12px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background: #00ffff;
+      color: black;
+    }
+    .screen {
+      margin-top: 30px;
+      text-align: center;
+    }
+    input {
+      padding: 8px;
+      margin: 5px;
+      border-radius: 4px;
+      border: none;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ultimate Calculator</h1>
+  <div class="menu">
+    <button onclick="showScreen('calc')">🔢 Calculator Mode</button>
+    <button onclick="showScreen('boss')">⚔️ Boss Fight</button>
+    <button onclick="showScreen('minigame')">🎮 Mini Game</button>
+    <button onclick="showScreen('about')">📖 About Creator</button>
+    <button onclick="toggleVoiceMode()">🔊 Toggle Voice Mode</button>
+  </div>
+
+  <div class="screen" id="screen"></div>
+
+  <script>
+    let voiceMode = false;
+
+    function showScreen(type) {
+      const screen = document.getElementById('screen');
+      if (type === 'calc') {
+        screen.innerHTML = `
+          <h2>Calculator</h2>
+          <input type="number" id="num1" placeholder="First number"> +
+          <input type="number" id="num2" placeholder="Second number">
+          <br><br>
+          <button onclick="calc()">Calculate</button>
+          <div id="result" style="margin-top: 10px;"></div>
+        `;
+      } else if (type === 'boss') {
+        screen.innerHTML = `<h2>Boss Fight 👹</h2><p>Boss Fight Mode coming soon...</p>`;
+      } else if (type === 'minigame') {
+        screen.innerHTML = `<h2>Mini Game 🎯</h2><p>Mini Game Mode coming soon...</p>`;
+      } else if (type === 'about') {
+        screen.innerHTML = `
+          <h2>About the Creator</h2>
+          <p>Abhyudaya Kapoor is an 11-year-old innovator, YouTuber, gamer, and part-time coder. Born on August 16, 2013, he's known for participating in International Benchmark Tests and has received multiple school awards. He's a blue belt in karate and a gold medalist in the WSKF Bahrain Karate Championship.</p>
+        `;
+      }
+    }
+
+    function calc() {
+      let a = parseFloat(document.getElementById('num1').value);
+      let b = parseFloat(document.getElementById('num2').value);
+      let res = a + b;
+      document.getElementById('result').innerText = `Result: ${res}`;
+      if (voiceMode) {
+        let msg = new SpeechSynthesisUtterance(`The result is ${res}`);
+        window.speechSynthesis.speak(msg);
+      }
+    }
+
+    function toggleVoiceMode() {
+      voiceMode = !voiceMode;
+      alert(`Voice mode is now ${voiceMode ? 'ON' : 'OFF'}`);
+    }
+  </script>
+</body>
+</html>
