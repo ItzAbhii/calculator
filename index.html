@@ -2,45 +2,137 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Abhi's Web Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💥 Ultimate Calculator: Web Edition 💥</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #111;
-      color: #fff;
-      text-align: center;
-      padding: 2rem;
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(to right, #0f0f0f, #1a1a1a);
+      color: #00ffcc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
     }
-    input, select, button {
+    h1 {
+      font-size: 2.5rem;
+      text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+      margin-bottom: 1rem;
+    }
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 90%;
+      max-width: 500px;
+    }
+    button {
+      padding: 1rem;
+      font-size: 1.2rem;
+      background: #000;
+      color: #00ffcc;
+      border: 2px solid #00ffcc;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 20px #00ffcc;
+    }
+    .hidden {
+      display: none;
+    }
+    input, select {
+      font-size: 1rem;
       padding: 0.5rem;
       margin: 0.5rem;
-      font-size: 1rem;
     }
     #result {
-      font-size: 1.2rem;
       margin-top: 1rem;
+      font-size: 1.5rem;
+      color: #ff0;
     }
   </style>
 </head>
 <body>
-  <h1>🧠 Abhyudaya's Web Calculator 🔢</h1>
+  <h1>⚡ ULTIMATE CALCULATOR ⚡</h1>
 
-  <input type="number" id="num1" placeholder="Enter first number">
-  <select id="operation">
-    <option value="add">➕ Add</option>
-    <option value="subtract">➖ Subtract</option>
-    <option value="multiply">✖ Multiply</option>
-    <option value="divide">➗ Divide</option>
-  </select>
-  <input type="number" id="num2" placeholder="Enter second number">
+  <div class="menu" id="main-menu">
+    <button onclick="showCalc()">🧠 Calculator</button>
+    <button onclick="showBossFight()">👹 Boss Fight Mode</button>
+    <button onclick="showMinigames()">🎮 Mini-Games</button>
+    <button onclick="showAbout()">ℹ️ About the Creator</button>
+  </div>
 
-  <br>
-  <button onclick="calculate()">CALCULATE</button>
+  <div class="menu hidden" id="calculator">
+    <input type="number" id="num1" placeholder="First number" />
+    <select id="operation">
+      <option value="add">Add ➕</option>
+      <option value="subtract">Subtract ➖</option>
+      <option value="multiply">Multiply ✖</option>
+      <option value="divide">Divide ➗</option>
+    </select>
+    <input type="number" id="num2" placeholder="Second number" />
+    <button onclick="calculate()">Calculate!</button>
+    <div id="result"></div>
+    <button onclick="goBack()">⬅ Go Back</button>
+  </div>
 
-  <div id="result"></div>
+  <div class="menu hidden" id="bossfight">
+    <p>⚔️ You encountered a wild Math Boss! Beat it by solving this:</p>
+    <p id="question"></p>
+    <input type="text" id="answer" placeholder="Your answer" />
+    <button onclick="checkAnswer()">Submit</button>
+    <div id="bossResult"></div>
+    <button onclick="goBack()">⬅ Go Back</button>
+  </div>
+
+  <div class="menu hidden" id="minigames">
+    <p>🎯 Coming soon: Math Quiz, XP Battles, and more!</p>
+    <button onclick="goBack()">⬅ Go Back</button>
+  </div>
+
+  <div class="menu hidden" id="about">
+    <p>👦 Abhyudaya Kapoor is an 11-year-old prodigy born on August 16, 2013. He's a YouTuber, gamer, part-time coder, and a school legend. Known for his participation in International Benchmark Tests (IBT), Abhyudaya has received multiple awards and is a respected blue belt in karate. He's also a gold medalist in the WSKF Bahrain Karate Championship.</p>
+    <button onclick="goBack()">⬅ Go Back</button>
+  </div>
 
   <script>
+    const views = ['main-menu', 'calculator', 'bossfight', 'minigames', 'about'];
+    
+    function showView(id) {
+      views.forEach(view => {
+        document.getElementById(view).classList.add('hidden');
+      });
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function goBack() {
+      showView('main-menu');
+    }
+
+    function showCalc() {
+      showView('calculator');
+    }
+
+    function showBossFight() {
+      generateBossQuestion();
+      showView('bossfight');
+    }
+
+    function showMinigames() {
+      showView('minigames');
+    }
+
+    function showAbout() {
+      showView('about');
+    }
+
     function calculate() {
       const num1 = parseFloat(document.getElementById('num1').value);
       const num2 = parseFloat(document.getElementById('num2').value);
@@ -48,25 +140,34 @@
       let result;
 
       if (isNaN(num1) || isNaN(num2)) {
-        result = "Bruh, enter valid numbers 💀";
+        result = "Enter valid numbers!";
       } else {
         switch (op) {
-          case 'add':
-            result = num1 + num2;
-            break;
-          case 'subtract':
-            result = num1 - num2;
-            break;
-          case 'multiply':
-            result = num1 * num2;
-            break;
-          case 'divide':
-            result = num2 !== 0 ? (num1 / num2) : "You can't divide by zero fam 😭";
-            break;
+          case 'add': result = num1 + num2; break;
+          case 'subtract': result = num1 - num2; break;
+          case 'multiply': result = num1 * num2; break;
+          case 'divide': result = num2 !== 0 ? num1 / num2 : "Bruh can't divide by zero 💀"; break;
         }
       }
-
       document.getElementById('result').innerText = "Result: " + result;
+    }
+
+    let correctAnswer;
+    function generateBossQuestion() {
+      const a = Math.floor(Math.random() * 20) + 1;
+      const b = Math.floor(Math.random() * 10) + 1;
+      correctAnswer = a * b;
+      document.getElementById('question').innerText = `What is ${a} × ${b}?`;
+    }
+
+    function checkAnswer() {
+      const userAns = parseInt(document.getElementById('answer').value);
+      const resultBox = document.getElementById('bossResult');
+      if (userAns === correctAnswer) {
+        resultBox.innerText = "🔥 You defeated the Boss! GG!";
+      } else {
+        resultBox.innerText = "😵 Wrong answer! Try again!";
+      }
     }
   </script>
 </body>
