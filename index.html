@@ -1,148 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CALCULATOR X: THE VIBE WARRIOR EDITION</title>
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Courier New', monospace;
-      background: linear-gradient(to bottom right, #ff9a9e, #fad0c4);
-      color: #fff;
-      background-image: url('https://media.giphy.com/media/QNFhOolVeCzPQ2Mx85/giphy.gif');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      overflow-x: hidden;
-    }
-    .container {
-      text-align: center;
-      padding: 2rem;
-      backdrop-filter: blur(10px);
-    }
-    h1 {
-      font-size: 3rem;
-      text-shadow: 2px 2px 10px #000;
-    }
-    .button {
-      display: block;
-      margin: 1rem auto;
-      padding: 1rem 2rem;
-      background-color: #ff6ec7;
-      border: none;
-      border-radius: 12px;
-      font-size: 1.2rem;
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 0 10px #000;
-    }
-    .button:hover {
-      background-color: #ff99cc;
-    }
-    #game-area, #calc-area, #about-area, #minigames-menu, #bossfight-menu {
-      display: none;
-      margin-top: 2rem;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ultimate Calculator Game! WELCOME!!! </title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('https://media.giphy.com/media/l3vR85PnGsBwu1PFK/giphy.gif') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 50px auto;
+            width: 90%;
+            max-width: 800px;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 15px 25px;
+            margin: 10px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            background: #00bcd4;
+            color: white;
+        }
+        .hidden {
+            display: none;
+        }
+        .section {
+            margin-top: 20px;
+        }
+        .minigame-button {
+            background: #4caf50;
+        }
+        .back-btn {
+            background: #f44336;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>CALCULATOR X</h1>
-    <p>THE VIBE WARRIOR EDITION 🌅</p>
-    <button class="button" onclick="showCalc()">🧮 Calculator</button>
-    <button class="button" onclick="showMinigames()">🎮 Minigames</button>
-    <button class="button" onclick="showBossFightMenu()">⚔️ Boss Fights</button>
-    <button class="button" onclick="showAbout()">📜 About the Creator</button>
-  </div>
+    <div class="container">
+        <h1>ULTIMATE CALCULATOR 🔥</h1>
+        <div id="main-menu">
+            <button onclick="showCalculator()">Calculator</button>
+            <button onclick="showMinigames()">Minigames 🎮</button>
+            <button onclick="showBossFight()">Boss Fight ⚔️</button>
+            <button onclick="showAbout()">About</button>
+        </div>
 
-  <div id="calc-area" class="container">
-    <h2>Calculator</h2>
-    <input id="num1" type="number" placeholder="First number">
-    <input id="num2" type="number" placeholder="Second number">
-    <br><br>
-    <button onclick="operate('+')">Add</button>
-    <button onclick="operate('-')">Subtract</button>
-    <button onclick="operate('*')">Multiply</button>
-    <button onclick="operate('/')">Divide</button>
-    <p id="result"></p>
-    <button onclick="goBack()">⬅️ Back</button>
-  </div>
+        <div id="calculator" class="section hidden">
+            <h2>Advanced Calculator</h2>
+            <input type="number" id="num1" placeholder="Enter first number" />
+            <input type="number" id="num2" placeholder="Enter second number" /><br>
+            <button onclick="calculate('+')">Add</button>
+            <button onclick="calculate('-')">Subtract</button>
+            <button onclick="calculate('*')">Multiply</button>
+            <button onclick="calculate('/')">Divide</button>
+            <p id="result"></p>
+            <button class="back-btn" onclick="goBack()">Go Back</button>
+        </div>
 
-  <div id="minigames-menu" class="container">
-    <h2>Minigames</h2>
-    <ul style="list-style: none; padding: 0;">
-      <li><button class="button">1. Tic Tac Toe</button></li>
-      <li><button class="button">2. Reaction Timer</button></li>
-      <li><button class="button">3. Quick Math Blitz</button></li>
-      <li><button class="button">4. Memory Flip Game</button></li>
-      <li><button class="button">5. Guess the Number</button></li>
-      <li><button class="button">6. Color Match</button></li>
-      <li><button class="button">7. Dodge the Equation</button></li>
-      <li><button class="button">8. Typing Speed Test</button></li>
-      <li><button class="button">9. Hidden Button</button></li>
-      <li><button class="button">10. Calculator Trivia</button></li>
-    </ul>
-    <button onclick="goBack()">⬅️ Back</button>
-  </div>
+        <div id="minigames" class="section hidden">
+            <h2>🎯 Choose a Minigame</h2>
+            <div>
+                <button class="minigame-button">Tic-Tac-Toe</button>
+                <button class="minigame-button">Guess the Number</button>
+                <button class="minigame-button">Rock Paper Scissors</button>
+                <button class="minigame-button">Quick Math</button>
+                <button class="minigame-button">Memory Game</button>
+                <button class="minigame-button">Maze Escape</button>
+                <button class="minigame-button">Typing Speed</button>
+                <button class="minigame-button">Math Duel</button>
+                <button class="minigame-button">Reaction Timer</button>
+                <button class="minigame-button">Clicker Game</button>
+            </div>
+            <button class="back-btn" onclick="goBack()">Go Back</button>
+        </div>
 
-  <div id="bossfight-menu" class="container">
-    <h2>Boss Fights</h2>
-    <button class="button">😐 Easy - Slimey</button>
-    <button class="button">😠 Medium - CalcClone</button>
-    <button class="button">😈 Hard - Math Demon</button>
-    <button onclick="goBack()">⬅️ Back</button>
-  </div>
+        <div id="bossfight" class="section hidden">
+            <h2>👾 Boss Battle Mode</h2>
+            <p>Prepare your skills... a big brain battle awaits!</p>
+            <button class="minigame-button">Start Boss Fight</button><br>
+            <button class="back-btn" onclick="goBack()">Go Back</button>
+        </div>
 
-  <div id="about-area" class="container">
-    <h2>About the Creator</h2>
-    <p>
-      Abhyudaya Kapoor is an 11-year-old prodigy, born on August 16th, 2013. 🎂<br>
-      He's a YouTuber, gamer, part-time coder, and a top-tier student known for his participation in international competitions like IBT 🌍.<br>
-      He’s earned multiple awards and is recognized as a blue belt in karate, also winning a gold medal at the WSKF Bahrain Karate Championship. 🥋🏅<br>
-      His creativity, skills, and imagination power this project — and he's just getting started! 🚀<br>
-    </p>
-    <button onclick="goBack()">⬅️ Back</button>
-  </div>
+        <div id="about" class="section hidden">
+            <h2>About the Creator</h2>
+            <p>
+                Abhyudaya Kapoor is a brilliant 11-year-old creator, born on August 16, 2013.
+                A multi-talented YouTuber, gamer, and part-time coder, he has a deep passion
+                for building fun and educational tools. He has proudly earned a gold medal
+                in the WSKF Bahrain Karate Championship and holds a blue belt with seniority.
+                In school, Abhyudaya is recognized for his achievements in International Benchmark Tests (IBT),
+                and has won multiple awards for excellence. This project reflects his creativity,
+                intelligence, and dedication to making learning fun. Keep an eye out—this kid's going places! 🚀
+            </p>
+            <button class="back-btn" onclick="goBack()">Go Back</button>
+        </div>
+    </div>
 
-  <script>
-    function showCalc() {
-      hideAll();
-      document.getElementById('calc-area').style.display = 'block';
-    }
-    function showMinigames() {
-      hideAll();
-      document.getElementById('minigames-menu').style.display = 'block';
-    }
-    function showBossFightMenu() {
-      hideAll();
-      document.getElementById('bossfight-menu').style.display = 'block';
-    }
-    function showAbout() {
-      hideAll();
-      document.getElementById('about-area').style.display = 'block';
-    }
-    function hideAll() {
-      document.querySelectorAll('.container').forEach(el => el.style.display = 'none');
-    }
-    function goBack() {
-      document.querySelectorAll('.container').forEach(el => el.style.display = 'none');
-      document.querySelectorAll('.container')[0].style.display = 'block';
-    }
-    function operate(op) {
-      let n1 = parseFloat(document.getElementById('num1').value);
-      let n2 = parseFloat(document.getElementById('num2').value);
-      let result = 0;
-      if (op == '+') result = n1 + n2;
-      else if (op == '-') result = n1 - n2;
-      else if (op == '*') result = n1 * n2;
-      else if (op == '/') {
-        if (n2 == 0) result = "Can't divide by zero 💀";
-        else result = n1 / n2;
-      }
-      document.getElementById('result').innerText = "Result: " + result;
-    }
-  </script>
+    <script>
+        function showCalculator() {
+            hideAll();
+            document.getElementById("calculator").classList.remove("hidden");
+        }
+
+        function showMinigames() {
+            hideAll();
+            document.getElementById("minigames").classList.remove("hidden");
+        }
+
+        function showBossFight() {
+            hideAll();
+            document.getElementById("bossfight").classList.remove("hidden");
+        }
+
+        function showAbout() {
+            hideAll();
+            document.getElementById("about").classList.remove("hidden");
+        }
+
+        function hideAll() {
+            document.getElementById("main-menu").classList.add("hidden");
+            document.getElementById("calculator").classList.add("hidden");
+            document.getElementById("minigames").classList.add("hidden");
+            document.getElementById("bossfight").classList.add("hidden");
+            document.getElementById("about").classList.add("hidden");
+        }
+
+        function goBack() {
+            hideAll();
+            document.getElementById("main-menu").classList.remove("hidden");
+        }
+
+        function calculate(op) {
+            const num1 = parseFloat(document.getElementById("num1").value);
+            const num2 = parseFloat(document.getElementById("num2").value);
+            let result;
+            if (op === '+') result = num1 + num2;
+            else if (op === '-') result = num1 - num2;
+            else if (op === '*') result = num1 * num2;
+            else if (op === '/') result = num2 !== 0 ? num1 / num2 : 'Can’t divide by zero!';
+            else result = 'Invalid';
+            document.getElementById("result").innerText = `Result: ${result}`;
+        }
+    </script>
 </body>
 </html>
