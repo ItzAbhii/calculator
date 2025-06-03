@@ -1,161 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ultimate Calculator Game</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: url('https://media.giphy.com/media/l3vR85PnGsBwu1PFK/giphy.gif') no-repeat center center fixed;
-            background-size: cover;
-            color: white;
-            text-align: center;
-        }
-        .container {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 40px;
-            border-radius: 20px;
-            margin: 50px auto;
-            width: 90%;
-            max-width: 800px;
-        }
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-        button {
-            padding: 15px 25px;
-            margin: 10px;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            background: #00bcd4;
-            color: white;
-        }
-        .hidden {
-            display: none;
-        }
-        .section {
-            margin-top: 20px;
-        }
-        .minigame-button {
-            background: #4caf50;
-        }
-        .back-btn {
-            background: #f44336;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ultimate Sigma Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://media.giphy.com/media/xTiTntVx3E5U3rYv0Q/giphy.gif') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3rem;
+      text-shadow: 2px 2px 5px #000;
+      margin-top: 2rem;
+    }
+    .menu {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+    button {
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 12px;
+      background-color: #111;
+      color: #0f0;
+      box-shadow: 0 0 15px #0f0;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+    button:hover {
+      background-color: #222;
+      transform: scale(1.05);
+    }
+    .section {
+      display: none;
+      margin-top: 2rem;
+    }
+    .back {
+      margin-top: 2rem;
+      cursor: pointer;
+      color: #ff0;
+      text-decoration: underline;
+    }
+    textarea, input {
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>ULTIMATE CALCULATOR 🔥</h1>
-        <div id="main-menu">
-            <button onclick="showCalculator()">Calculator</button>
-            <button onclick="showMinigames()">Minigames 🎮</button>
-            <button onclick="showBossFight()">Boss Fight ⚔️</button>
-            <button onclick="showAbout()">About</button>
-        </div>
+  <h1>🔥 CALCULATOR 🔥</h1>
+  <div class="menu">
+    <button onclick="showSection('calc')">🧠 Calculator</button>
+    <button onclick="showSection('minigames')">🎮 Minigames</button>
+    <button onclick="showSection('bossfight')">⚔️ Boss Fight</button>
+    <button onclick="showSection('about')">👤 About Creator</button>
+  </div>
 
-        <div id="calculator" class="section hidden">
-            <h2>Advanced Calculator</h2>
-            <input type="number" id="num1" placeholder="Enter first number" />
-            <input type="number" id="num2" placeholder="Enter second number" /><br>
-            <button onclick="calculate('+')">Add</button>
-            <button onclick="calculate('-')">Subtract</button>
-            <button onclick="calculate('*')">Multiply</button>
-            <button onclick="calculate('/')">Divide</button>
-            <p id="result"></p>
-            <button class="back-btn" onclick="goBack()">Go Back</button>
-        </div>
+  <div id="calc" class="section">
+    <h2>🧠 Advanced Calculator</h2>
+    <input id="expr" placeholder="e.g., 2+2 or sin(30)" />
+    <br />
+    <button onclick="calculate()">Calculate</button>
+    <p id="result"></p>
+    <div class="back" onclick="goBack()">⬅️ Go Back</div>
+  </div>
 
-        <div id="minigames" class="section hidden">
-            <h2>🎯 Choose a Minigame</h2>
-            <div>
-                <button class="minigame-button">Tic-Tac-Toe</button>
-                <button class="minigame-button">Guess the Number</button>
-                <button class="minigame-button">Rock Paper Scissors</button>
-                <button class="minigame-button">Quick Math</button>
-                <button class="minigame-button">Memory Game</button>
-                <button class="minigame-button">Maze Escape</button>
-                <button class="minigame-button">Typing Speed</button>
-                <button class="minigame-button">Math Duel</button>
-                <button class="minigame-button">Reaction Timer</button>
-                <button class="minigame-button">Clicker Game</button>
-            </div>
-            <button class="back-btn" onclick="goBack()">Go Back</button>
-        </div>
+  <div id="minigames" class="section">
+    <h2>🎮 Minigames (10 Coming Up!)</h2>
+    <p>👇 Choose a minigame:</p>
+    <button onclick="alert('Quick Math not yet implemented')">Quick Math</button>
+    <button onclick="alert('Memory Flip not yet implemented')">Memory Flip</button>
+    <button onclick="alert('Click Speed not yet implemented')">Click Speed</button>
+    <button onclick="alert('Reaction Tester not yet implemented')">Reaction Tester</button>
+    <button onclick="alert('Dice Roller not yet implemented')">Dice Roller</button>
+    <button onclick="alert('Number Guesser not yet implemented')">Number Guesser</button>
+    <button onclick="alert('Match Shapes not yet implemented')">Match Shapes</button>
+    <button onclick="alert('Speed Tap not yet implemented')">Speed Tap</button>
+    <button onclick="alert('Typing Test not yet implemented')">Typing Test</button>
+    <button onclick="alert('Emoji Match not yet implemented')">Emoji Match</button>
+    <div class="back" onclick="goBack()">⬅️ Go Back</div>
+  </div>
 
-        <div id="bossfight" class="section hidden">
-            <h2>👾 Boss Battle Mode</h2>
-            <p>Prepare your skills... a big brain battle awaits!</p>
-            <button class="minigame-button">Start Boss Fight</button><br>
-            <button class="back-btn" onclick="goBack()">Go Back</button>
-        </div>
+  <div id="bossfight" class="section">
+    <h2>⚔️ Boss Fight Mode</h2>
+    <p>Battle incoming... prepare your brain! (coming soon)</p>
+    <div class="back" onclick="goBack()">⬅️ Go Back</div>
+  </div>
 
-        <div id="about" class="section hidden">
-            <h2>About the Creator</h2>
-            <p>
-                Abhyudaya Kapoor is a brilliant 11-year-old creator, born on August 16, 2013.
-                A multi-talented YouTuber, gamer, and part-time coder, he has a deep passion
-                for building fun and educational tools. He has proudly earned a gold medal
-                in the WSKF Bahrain Karate Championship and holds a blue belt with seniority.
-                In school, Abhyudaya is recognized for his achievements in International Benchmark Tests (IBT),
-                and has won multiple awards for excellence. This project reflects his creativity,
-                intelligence, and dedication to making learning fun. Keep an eye out—this kid's going places! 🚀
-            </p>
-            <button class="back-btn" onclick="goBack()">Go Back</button>
-        </div>
-    </div>
+  <div id="about" class="section">
+    <h2>👤 About Abhyudaya Kapoor</h2>
+    <p>
+      Abhyudaya Kapoor is an 11-year-old innovator born on 16th August 2013.<br />
+      A YouTuber, gamer, part-time coder, and karate gold medalist 🥋.<br />
+      Known for crushing International Benchmark Tests and flexing his brain 🧠.<br />
+      With seniority as a blue belt in WSKF Bahrain, he’s a legend in the making.
+    </p>
+    <div class="back" onclick="goBack()">⬅️ Go Back</div>
+  </div>
 
-    <script>
-        function showCalculator() {
-            hideAll();
-            document.getElementById("calculator").classList.remove("hidden");
-        }
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach((sec) => (sec.style.display = 'none'));
+      document.getElementById(id).style.display = 'block';
+    }
 
-        function showMinigames() {
-            hideAll();
-            document.getElementById("minigames").classList.remove("hidden");
-        }
+    function goBack() {
+      document.querySelectorAll('.section').forEach((sec) => (sec.style.display = 'none'));
+    }
 
-        function showBossFight() {
-            hideAll();
-            document.getElementById("bossfight").classList.remove("hidden");
-        }
-
-        function showAbout() {
-            hideAll();
-            document.getElementById("about").classList.remove("hidden");
-        }
-
-        function hideAll() {
-            document.getElementById("main-menu").classList.add("hidden");
-            document.getElementById("calculator").classList.add("hidden");
-            document.getElementById("minigames").classList.add("hidden");
-            document.getElementById("bossfight").classList.add("hidden");
-            document.getElementById("about").classList.add("hidden");
-        }
-
-        function goBack() {
-            hideAll();
-            document.getElementById("main-menu").classList.remove("hidden");
-        }
-
-        function calculate(op) {
-            const num1 = parseFloat(document.getElementById("num1").value);
-            const num2 = parseFloat(document.getElementById("num2").value);
-            let result;
-            if (op === '+') result = num1 + num2;
-            else if (op === '-') result = num1 - num2;
-            else if (op === '*') result = num1 * num2;
-            else if (op === '/') result = num2 !== 0 ? num1 / num2 : 'Can’t divide by zero!';
-            else result = 'Invalid';
-            document.getElementById("result").innerText = `Result: ${result}`;
-        }
-    </script>
+    function calculate() {
+      try {
+        const expr = document.getElementById('expr').value;
+        const result = eval(expr.replace(/sin|cos|tan|sqrt/g, (match) => `Math.${match}`));
+        document.getElementById('result').textContent = '= ' + result;
+      } catch {
+        document.getElementById('result').textContent = 'Error ❌';
+      }
+    }
+  </script>
 </body>
 </html>
