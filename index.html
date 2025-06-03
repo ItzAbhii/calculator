@@ -3,171 +3,145 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>💥 Ultimate Calculator: Web Edition 💥</title>
+  <title>CALCULATOR X: THE VIBE WARRIOR EDITION</title>
+  <link rel="stylesheet" href="styles.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
     body {
       margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background: linear-gradient(to right, #0f0f0f, #1a1a1a);
-      color: #00ffcc;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      font-family: 'Courier New', monospace;
+      background: linear-gradient(to bottom right, #ff9a9e, #fad0c4);
+      color: #fff;
+      background-image: url('https://media.giphy.com/media/QNFhOolVeCzPQ2Mx85/giphy.gif');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      overflow-x: hidden;
+    }
+    .container {
+      text-align: center;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
     }
     h1 {
-      font-size: 2.5rem;
-      text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
-      margin-bottom: 1rem;
+      font-size: 3rem;
+      text-shadow: 2px 2px 10px #000;
     }
-    .menu {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      width: 90%;
-      max-width: 500px;
-    }
-    button {
-      padding: 1rem;
+    .button {
+      display: block;
+      margin: 1rem auto;
+      padding: 1rem 2rem;
+      background-color: #ff6ec7;
+      border: none;
+      border-radius: 12px;
       font-size: 1.2rem;
-      background: #000;
-      color: #00ffcc;
-      border: 2px solid #00ffcc;
-      border-radius: 8px;
+      color: white;
       cursor: pointer;
-      transition: 0.3s;
+      box-shadow: 0 0 10px #000;
     }
-    button:hover {
-      background: #00ffcc;
-      color: #000;
-      box-shadow: 0 0 20px #00ffcc;
+    .button:hover {
+      background-color: #ff99cc;
     }
-    .hidden {
+    #game-area, #calc-area, #about-area, #minigames-menu, #bossfight-menu {
       display: none;
-    }
-    input, select {
-      font-size: 1rem;
-      padding: 0.5rem;
-      margin: 0.5rem;
-    }
-    #result {
-      margin-top: 1rem;
-      font-size: 1.5rem;
-      color: #ff0;
+      margin-top: 2rem;
     }
   </style>
 </head>
 <body>
-  <h1>⚡ ULTIMATE CALCULATOR ⚡</h1>
-
-  <div class="menu" id="main-menu">
-    <button onclick="showCalc()">🧠 Calculator</button>
-    <button onclick="showBossFight()">👹 Boss Fight Mode</button>
-    <button onclick="showMinigames()">🎮 Mini-Games</button>
-    <button onclick="showAbout()">ℹ️ About the Creator</button>
+  <div class="container">
+    <h1>CALCULATOR X</h1>
+    <p>THE VIBE WARRIOR EDITION 🌅</p>
+    <button class="button" onclick="showCalc()">🧮 Calculator</button>
+    <button class="button" onclick="showMinigames()">🎮 Minigames</button>
+    <button class="button" onclick="showBossFightMenu()">⚔️ Boss Fights</button>
+    <button class="button" onclick="showAbout()">📜 About the Creator</button>
   </div>
 
-  <div class="menu hidden" id="calculator">
-    <input type="number" id="num1" placeholder="First number" />
-    <select id="operation">
-      <option value="add">Add ➕</option>
-      <option value="subtract">Subtract ➖</option>
-      <option value="multiply">Multiply ✖</option>
-      <option value="divide">Divide ➗</option>
-    </select>
-    <input type="number" id="num2" placeholder="Second number" />
-    <button onclick="calculate()">Calculate!</button>
-    <div id="result"></div>
-    <button onclick="goBack()">⬅ Go Back</button>
+  <div id="calc-area" class="container">
+    <h2>Calculator</h2>
+    <input id="num1" type="number" placeholder="First number">
+    <input id="num2" type="number" placeholder="Second number">
+    <br><br>
+    <button onclick="operate('+')">Add</button>
+    <button onclick="operate('-')">Subtract</button>
+    <button onclick="operate('*')">Multiply</button>
+    <button onclick="operate('/')">Divide</button>
+    <p id="result"></p>
+    <button onclick="goBack()">⬅️ Back</button>
   </div>
 
-  <div class="menu hidden" id="bossfight">
-    <p>⚔️ You encountered a wild Math Boss! Beat it by solving this:</p>
-    <p id="question"></p>
-    <input type="text" id="answer" placeholder="Your answer" />
-    <button onclick="checkAnswer()">Submit</button>
-    <div id="bossResult"></div>
-    <button onclick="goBack()">⬅ Go Back</button>
+  <div id="minigames-menu" class="container">
+    <h2>Minigames</h2>
+    <ul style="list-style: none; padding: 0;">
+      <li><button class="button">1. Tic Tac Toe</button></li>
+      <li><button class="button">2. Reaction Timer</button></li>
+      <li><button class="button">3. Quick Math Blitz</button></li>
+      <li><button class="button">4. Memory Flip Game</button></li>
+      <li><button class="button">5. Guess the Number</button></li>
+      <li><button class="button">6. Color Match</button></li>
+      <li><button class="button">7. Dodge the Equation</button></li>
+      <li><button class="button">8. Typing Speed Test</button></li>
+      <li><button class="button">9. Hidden Button</button></li>
+      <li><button class="button">10. Calculator Trivia</button></li>
+    </ul>
+    <button onclick="goBack()">⬅️ Back</button>
   </div>
 
-  <div class="menu hidden" id="minigames">
-    <p>🎯 Coming soon: Math Quiz, XP Battles, and more!</p>
-    <button onclick="goBack()">⬅ Go Back</button>
+  <div id="bossfight-menu" class="container">
+    <h2>Boss Fights</h2>
+    <button class="button">😐 Easy - Slimey</button>
+    <button class="button">😠 Medium - CalcClone</button>
+    <button class="button">😈 Hard - Math Demon</button>
+    <button onclick="goBack()">⬅️ Back</button>
   </div>
 
-  <div class="menu hidden" id="about">
-    <p>👦 Abhyudaya Kapoor is an 11-year-old prodigy born on August 16, 2013. He's a YouTuber, gamer, part-time coder, and a school legend. Known for his participation in International Benchmark Tests (IBT), Abhyudaya has received multiple awards and is a respected blue belt in karate. He's also a gold medalist in the WSKF Bahrain Karate Championship.</p>
-    <button onclick="goBack()">⬅ Go Back</button>
+  <div id="about-area" class="container">
+    <h2>About the Creator</h2>
+    <p>
+      Abhyudaya Kapoor is an 11-year-old prodigy, born on August 16th, 2013. 🎂<br>
+      He's a YouTuber, gamer, part-time coder, and a top-tier student known for his participation in international competitions like IBT 🌍.<br>
+      He’s earned multiple awards and is recognized as a blue belt in karate, also winning a gold medal at the WSKF Bahrain Karate Championship. 🥋🏅<br>
+      His creativity, skills, and imagination power this project — and he's just getting started! 🚀<br>
+    </p>
+    <button onclick="goBack()">⬅️ Back</button>
   </div>
 
   <script>
-    const views = ['main-menu', 'calculator', 'bossfight', 'minigames', 'about'];
-    
-    function showView(id) {
-      views.forEach(view => {
-        document.getElementById(view).classList.add('hidden');
-      });
-      document.getElementById(id).classList.remove('hidden');
-    }
-
-    function goBack() {
-      showView('main-menu');
-    }
-
     function showCalc() {
-      showView('calculator');
+      hideAll();
+      document.getElementById('calc-area').style.display = 'block';
     }
-
-    function showBossFight() {
-      generateBossQuestion();
-      showView('bossfight');
-    }
-
     function showMinigames() {
-      showView('minigames');
+      hideAll();
+      document.getElementById('minigames-menu').style.display = 'block';
     }
-
+    function showBossFightMenu() {
+      hideAll();
+      document.getElementById('bossfight-menu').style.display = 'block';
+    }
     function showAbout() {
-      showView('about');
+      hideAll();
+      document.getElementById('about-area').style.display = 'block';
     }
-
-    function calculate() {
-      const num1 = parseFloat(document.getElementById('num1').value);
-      const num2 = parseFloat(document.getElementById('num2').value);
-      const op = document.getElementById('operation').value;
-      let result;
-
-      if (isNaN(num1) || isNaN(num2)) {
-        result = "Enter valid numbers!";
-      } else {
-        switch (op) {
-          case 'add': result = num1 + num2; break;
-          case 'subtract': result = num1 - num2; break;
-          case 'multiply': result = num1 * num2; break;
-          case 'divide': result = num2 !== 0 ? num1 / num2 : "Bruh can't divide by zero 💀"; break;
-        }
+    function hideAll() {
+      document.querySelectorAll('.container').forEach(el => el.style.display = 'none');
+    }
+    function goBack() {
+      document.querySelectorAll('.container').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.container')[0].style.display = 'block';
+    }
+    function operate(op) {
+      let n1 = parseFloat(document.getElementById('num1').value);
+      let n2 = parseFloat(document.getElementById('num2').value);
+      let result = 0;
+      if (op == '+') result = n1 + n2;
+      else if (op == '-') result = n1 - n2;
+      else if (op == '*') result = n1 * n2;
+      else if (op == '/') {
+        if (n2 == 0) result = "Can't divide by zero 💀";
+        else result = n1 / n2;
       }
       document.getElementById('result').innerText = "Result: " + result;
-    }
-
-    let correctAnswer;
-    function generateBossQuestion() {
-      const a = Math.floor(Math.random() * 20) + 1;
-      const b = Math.floor(Math.random() * 10) + 1;
-      correctAnswer = a * b;
-      document.getElementById('question').innerText = `What is ${a} × ${b}?`;
-    }
-
-    function checkAnswer() {
-      const userAns = parseInt(document.getElementById('answer').value);
-      const resultBox = document.getElementById('bossResult');
-      if (userAns === correctAnswer) {
-        resultBox.innerText = "🔥 You defeated the Boss! GG!";
-      } else {
-        resultBox.innerText = "😵 Wrong answer! Try again!";
-      }
     }
   </script>
 </body>
