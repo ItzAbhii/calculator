@@ -1,154 +1,398 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ULTIMATE CALCULATOR</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: url('https://media.giphy.com/media/xT1R9rj3wspxRKvnFC/giphy.gif') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
-      text-align: center;
-    }
-    header {
-      background-color: rgba(0,0,0,0.7);
-      padding: 20px;
-    }
-    h1 {
-      font-size: 4rem;
-      margin: 0;
-    }
-    nav button {
-      margin: 10px;
-      padding: 15px 30px;
-      font-size: 1.2rem;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      background-color: #333;
-      color: white;
-    }
-    section {
-      padding: 30px;
-      background-color: rgba(0,0,0,0.6);
-      margin: 20px;
-      border-radius: 15px;
-    }
-    .game-button {
-      margin: 5px;
-      padding: 10px;
-      border-radius: 8px;
-      background-color: #555;
-      color: white;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>ULTIMATE CALCULATOR</h1>
-    <p>BY: Abhyudaya Kapoor</p>
-  </header>
-  <nav>
-    <button onclick="showSection('calc')">Calculator</button>
-    <button onclick="showSection('minigames')">Minigames</button>
-    <button onclick="showSection('boss')">Boss Fight</button>
-    <button onclick="showSection('about')">About</button>
-  </nav>
+import json
+import os
+import random
+import time
+import pyttsx3
 
-  <section id="calc" style="display: none;">
-    <h2>Advanced Calculator</h2>
-    <input type="number" id="num1" placeholder="Enter number 1">
-    <input type="number" id="num2" placeholder="Enter number 2">
-    <br>
-    <button onclick="calc('+')">+</button>
-    <button onclick="calc('-')">-</button>
-    <button onclick="calc('*')">×</button>
-    <button onclick="calc('/')">÷</button>
-    <p id="result"></p>
-  </section>
+# ====== UTILS ======
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
-  <section id="minigames" style="display: none;">
-    <h2>Minigames</h2>
-    <div>
-      <button class="game-button" onclick="guessGame()">Guess the Number</button>
-      <button class="game-button" onclick="clickerGame()">Clicker Madness</button>
-      <button class="game-button" onclick="alert('More Games Coming Soon')">Memory Match</button>
-      <button class="game-button" onclick="alert('More Games Coming Soon')">Quick Math</button>
-      <button class="game-button" onclick="alert('More Games Coming Soon')">Reaction Time</button>
-      <button class="game-button" onclick="alert('More Games Coming Soon')">Trivia Blitz</button>
-      <button class="game-button" onclick="alert('More Games Coming Soon')">Type Racer</button>
-      <button class="game-button" onclick="alert('More Games Coming Soon')">Maze Escape</button>
-      <button class="game-button" onclick="alert('More Games Coming Soon')">Color Match</button>
-      <button class="game-button" onclick="alert('More Games Coming Soon')">Emoji Puzzle</button>
-    </div>
-  </section>
+def slow_print(text, delay=0.03):
+    for char in text:
+        print(char, end='', flush=True)
+        time.sleep(delay)
+    print()
 
-  <section id="boss" style="display: none;">
-    <h2>💥 Boss Fight Mode 💥</h2>
-    <p>Enemy: Calculator Demon 😈</p>
-    <button onclick="bossAttack()">ATTACK!</button>
-    <p id="bossLog"></p>
-  </section>
+def input_number(prompt, allow_float=True):
+    while True:
+        val = input(prompt)
+        try:
+            return float(val) if allow_float else int(val)
+        except:
+            print("Yo that ain't a number, try again 🤡")
 
-  <section id="about" style="display: none;">
-    <h2>About the Creator</h2>
-    <p>
-      Abhyudaya Kapoor is a passionate and talented 11-year-old boy, born on August 16, 2013. He's not just your average kid—he’s a YouTuber, gamer, and part-time coder, always exploring the digital world and pushing boundaries. He stands out in school for his brilliance and has earned numerous awards for his achievements.
-    </p>
-    <p>
-      Known for his participation in the International Benchmark Tests (IBT), Abhyudaya consistently ranks among the top students. He’s also a respected blue belt in karate and earned a gold medal at the WSKF Bahrain Karate Championship, showcasing not only his brainpower but also his strength and discipline.
-    </p>
-  </section>
+def press_enter_to_continue():
+    input("\nPress Enter to go back...")
 
-  <script>
-    function showSection(id) {
-      document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
-      document.getElementById(id).style.display = 'block';
-    }
+# ====== VOICE MODE SETUP ======
+engine = pyttsx3.init()
+voice_mode = False  # Default OFF
 
-    function calc(op) {
-      let x = parseFloat(document.getElementById('num1').value);
-      let y = parseFloat(document.getElementById('num2').value);
-      let result;
-      if (op === '+') result = x + y;
-      else if (op === '-') result = x - y;
-      else if (op === '*') result = x * y;
-      else if (op === '/') result = y !== 0 ? x / y : 'Cannot divide by 0';
-      document.getElementById('result').innerText = `Result: ${result}`;
-    }
+def speak(text):
+    if voice_mode:
+        engine.say(text)
+        engine.runAndWait()
 
-    function guessGame() {
-      let number = Math.floor(Math.random() * 10) + 1;
-      let guess = prompt("Guess a number from 1 to 10");
-      if (parseInt(guess) === number) alert("YOU GUESSED IT 🎉");
-      else alert(`Nope! It was ${number}`);
-    }
+# ====== PROFILE HANDLING ======
+PROFILE_FILE = 'user_profile.json'
 
-    function clickerGame() {
-      let clicks = 0;
-      let stop = false;
-      let button = document.createElement('button');
-      button.innerText = 'CLICK ME FAST!';
-      button.style.fontSize = '20px';
-      button.onclick = () => clicks++;
-      document.getElementById('minigames').appendChild(button);
+default_profile = {
+    "username": "",
+    "xp": 0,
+    "games_played": 0,
+    "boss_wins": 0,
+    "minigames_won": 0
+}
 
-      setTimeout(() => {
-        stop = true;
-        button.remove();
-        alert(`Time's up! You clicked ${clicks} times!`);
-      }, 5000);
-    }
+def load_profile():
+    if os.path.exists(PROFILE_FILE):
+        with open(PROFILE_FILE, 'r') as f:
+            return json.load(f)
+    else:
+        return default_profile.copy()
 
-    function bossAttack() {
-      const log = document.getElementById("bossLog");
-      const dmg = Math.floor(Math.random() * 50) + 1;
-      log.innerText = `You dealt ${dmg} damage to the boss!`;
-    }
-  </script>
-</body>
-</html>
+def save_profile(profile):
+    with open(PROFILE_FILE, 'w') as f:
+        json.dump(profile, f, indent=4)
+
+profile = load_profile()
+
+# ====== ABOUT SECTION ======
+ABOUT_TEXT = """
+Abhyudaya Kapoor is a young boy, 11 years old, born on 16th August 2013.
+He is a YouTuber, gamer, and part-time coder, known for his smarts at school and
+participating in International Benchmark Tests (IBT). He's earned multiple awards
+at school and holds a blue belt in karate with respect and seniority. Abhyudaya
+is also a gold medalist in the WSKF Bahrain Karate Championship.
+
+Keep shining, Abhi! 🌟
+"""
+
+# ====== PIXEL FONT & STYLING (simple simulation) ======
+def styled_title():
+    print(r"""
+  ____      _            _       _             
+ |  _ \ ___| | ___   ___| | __ _| |_ ___  _ __ 
+ | |_) / _ \ |/ _ \ / __| |/ _` | __/ _ \| '__|
+ |  __/  __/ | (_) | (__| | (_| | || (_) | |   
+ |_|   \___|_|\___/ \___|_|\__,_|\__\___/|_|   
+    """)
+    print("              THE ULTIMATE PYTHON CALCULATOR\n")
+
+# ====== CALCULATOR FUNCTIONS ======
+def add(x, y): return x + y
+def subtract(x, y): return x - y
+def multiply(x, y): return x * y
+def divide(x, y):
+    if y == 0: return "Bruh you can't divide by zero 💀"
+    return x / y
+
+calc_history = []
+
+def calculator():
+    clear_screen()
+    slow_print("Welcome to the Advanced Calculator! ⚡")
+    while True:
+        print("\nChoose an operation:")
+        print("1 ➕ Add")
+        print("2 ➖ Subtract")
+        print("3 ✖ Multiply")
+        print("4 ➗ Divide")
+        print("5 📝 View History")
+        print("6 🔙 Go Back")
+
+        choice = input("Your pick: ")
+
+        if choice == '6':
+            break
+        elif choice == '5':
+            clear_screen()
+            if not calc_history:
+                print("No history yet 🤷‍♂️")
+            else:
+                print("=== History ===")
+                for i, entry in enumerate(calc_history, 1):
+                    print(f"{i}. {entry}")
+            press_enter_to_continue()
+            clear_screen()
+            continue
+
+        if choice not in ['1', '2', '3', '4']:
+            print("Invalid choice, try again.")
+            continue
+
+        num1 = input_number("First number: ")
+        num2 = input_number("Second number: ")
+
+        if choice == '1':
+            res = add(num1, num2)
+            op = '+'
+        elif choice == '2':
+            res = subtract(num1, num2)
+            op = '-'
+        elif choice == '3':
+            res = multiply(num1, num2)
+            op = '*'
+        elif choice == '4':
+            res = divide(num1, num2)
+            op = '/'
+
+        calc_history.append(f"{num1} {op} {num2} = {res}")
+        profile["xp"] += 5
+        profile["games_played"] += 1
+        save_profile(profile)
+
+        print(f"Result: {res}")
+        speak(f"The result is {res}")
+
+        press_enter_to_continue()
+        clear_screen()
+
+# ====== BOSS FIGHT MODE ======
+class BossFight:
+    def __init__(self):
+        self.player_hp = 100
+        self.boss_hp = 150
+
+    def player_attack(self):
+        damage = random.randint(15, 30)
+        self.boss_hp -= damage
+        slow_print(f"You hit the Boss for {damage} damage!")
+        speak(f"You hit the Boss for {damage} damage!")
+
+    def boss_attack(self):
+        damage = random.randint(10, 25)
+        self.player_hp -= damage
+        slow_print(f"The Boss attacks and hits you for {damage} damage!")
+        speak(f"The Boss attacks and hits you for {damage} damage!")
+
+    def fight(self):
+        clear_screen()
+        slow_print("Boss Fight Initiated! 🥊", 0.05)
+        while self.player_hp > 0 and self.boss_hp > 0:
+            print(f"\nYour HP: {self.player_hp}  |  Boss HP: {self.boss_hp}")
+            print("Choose your move:")
+            print("1. Attack")
+            print("2. Heal (+20 HP)")
+            print("3. Run (Give up)")
+
+            choice = input("Pick: ")
+            if choice == '1':
+                self.player_attack()
+                if self.boss_hp <= 0:
+                    slow_print("You defeated the Boss! 🎉")
+                    profile["boss_wins"] += 1
+                    profile["xp"] += 50
+                    save_profile(profile)
+                    break
+                self.boss_attack()
+            elif choice == '2':
+                heal = random.randint(10, 20)
+                self.player_hp = min(self.player_hp + heal, 100)
+                slow_print(f"You healed {heal} HP!")
+                self.boss_attack()
+            elif choice == '3':
+                slow_print("You ran away... Coward! 🐔")
+                break
+            else:
+                print("Not a valid option.")
+
+            if self.player_hp <= 0:
+                slow_print("You were defeated by the Boss... Try again!")
+                break
+
+            time.sleep(1)
+
+        press_enter_to_continue()
+
+def boss_fight_mode():
+    boss = BossFight()
+    boss.fight()
+
+# ====== MINIGAMES ======
+def minigame_guess_number():
+    clear_screen()
+    slow_print("Welcome to Guess The Number! 🤫")
+    target = random.randint(1, 50)
+    attempts = 5
+    while attempts > 0:
+        guess = input_number(f"Guess a number between 1 and 50 ({attempts} tries left): ", False)
+        if guess == target:
+            slow_print("You guessed it! You win! 🎉")
+            profile["minigames_won"] += 1
+            profile["xp"] += 20
+            save_profile(profile)
+            break
+        elif guess < target:
+            print("Too low!")
+        else:
+            print("Too high!")
+        attempts -= 1
+    else:
+        print(f"You lost! The number was {target}.")
+    press_enter_to_continue()
+
+def minigame_rock_paper_scissors():
+    clear_screen()
+    slow_print("Rock Paper Scissors! 🤜🤛")
+    choices = ['rock', 'paper', 'scissors']
+    wins = 0
+    for _ in range(3):
+        user = input("Choose rock, paper or scissors: ").lower()
+        if user not in choices:
+            print("Invalid choice!")
+            continue
+        comp = random.choice(choices)
+        print(f"Computer chose {comp}")
+        if user == comp:
+            print("Draw!")
+        elif (user == 'rock' and comp == 'scissors') or (user == 'paper' and comp == 'rock') or (user == 'scissors' and comp == 'paper'):
+            print("You win this round!")
+            wins += 1
+        else:
+            print("You lose this round!")
+    if wins >= 2:
+        slow_print("You won the match! 🎉")
+        profile["minigames_won"] += 1
+        profile["xp"] += 20
+        save_profile(profile)
+    else:
+        slow_print("You lost the match... 😢")
+    press_enter_to_continue()
+
+def minigame_math_quiz():
+    clear_screen()
+    slow_print("Math Quiz! 🧠")
+    score = 0
+    for i in range(5):
+        a = random.randint(1, 20)
+        b = random.randint(1, 20)
+        op = random.choice(['+', '-', '*'])
+        if op == '+':
+            correct = a + b
+        elif op == '-':
+            correct = a - b
+        else:
+            correct = a * b
+        ans = input_number(f"Question {i+1}: {a} {op} {b} = ", False)
+        if ans == correct:
+            print("Correct!")
+            score += 1
+        else:
+            print(f"Wrong! The answer was {correct}.")
+    slow_print(f"Quiz over! You scored {score}/5")
+    if score >= 3:
+        profile["minigames_won"] += 1
+        profile["xp"] += 20
+        save_profile(profile)
+    press_enter_to_continue()
+
+# Dummy placeholders for the rest of the 10 minigames
+def minigame_placeholder(num):
+    clear_screen()
+    slow_print(f"Minigame #{num} coming soon! Stay tuned 👀")
+    press_enter_to_continue()
+
+minigames = [
+    minigame_guess_number,
+    minigame_rock_paper_scissors,
+    minigame_math_quiz,
+    lambda: minigame_placeholder(4),
+    lambda: minigame_placeholder(5),
+    lambda: minigame_placeholder(6),
+    lambda: minigame_placeholder(7),
+    lambda: minigame_placeholder(8),
+    lambda: minigame_placeholder(9),
+    lambda: minigame_placeholder(10)
+]
+
+def minigames_menu():
+    while True:
+        clear_screen()
+        slow_print("MINIGAMES GALORE 🎮 Pick one:")
+        for i in range(10):
+            print(f"{i+1}. Minigame {i+1}")
+        print("0. Go back")
+        choice = input("Your choice: ")
+        if choice == '0':
+            break
+        if choice.isdigit() and 1 <= int(choice) <= 10:
+            minigames[int(choice)-1]()
+        else:
+            print("Invalid input, try again.")
+            time.sleep(1)
+
+# ====== MAIN MENU ======
+def toggle_voice_mode():
+    global voice_mode
+    voice_mode = not voice_mode
+    print("Voice mode is now", "ON 🔊" if voice_mode else "OFF 🔇")
+    time.sleep(1)
+
+def about_screen():
+    clear_screen()
+    slow_print("ABOUT THE CREATOR\n")
+    slow_print(ABOUT_TEXT, 0.01)
+    press_enter_to_continue()
+
+def save_load_menu():
+    clear_screen()
+    print("Save/Load Profile")
+    print(f"Current profile username: {profile.get('username', '')}")
+    print("1. Change username")
+    print("2. Reset profile")
+    print("3. Go back")
+    choice = input("Pick: ")
+    if choice == '1':
+        new_name = input("Enter new username: ").strip()
+        if new_name:
+            profile['username'] = new_name
+            save_profile(profile)
+            print("Username saved!")
+    elif choice == '2':
+        confirm = input("Reset your profile? All progress lost! (y/n): ").lower()
+        if confirm == 'y':
+            global profile
+            profile = default_profile.copy()
+            save_profile(profile)
+            print("Profile reset!")
+    time.sleep(2)
+
+def main_menu():
+    while True:
+        clear_screen()
+        styled_title()
+        print(f"User: {profile.get('username', 'Guest')} | XP: {profile.get('xp',0)} | Games Won: {profile.get('minigames_won',0)}")
+        print("\nChoose your adventure:")
+        print("1. Calculator")
+        print("2. Boss Fight")
+        print("3. Minigames")
+        print("4. About")
+        print("5. Voice Mode Toggle")
+        print("6. Profile Settings")
+        print("0. Exit")
+
+        choice = input("Pick: ")
+
+        if choice == '0':
+            slow_print("Thanks for playing! Catch you later 👋")
+            break
+        elif choice == '1':
+            calculator()
+        elif choice == '2':
+            boss_fight_mode()
+        elif choice == '3':
+            minigames_menu()
+        elif choice == '4':
+            about_screen()
+        elif choice == '5':
+            toggle_voice_mode()
+        elif choice == '6':
+            save_load_menu()
+        else:
+            print("Try again, that choice ain't valid 😵‍💫")
+            time.sleep(1)
+
+if __name__ == '__main__':
+    main_menu()
