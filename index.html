@@ -1,131 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ultimate Sigma Calculator</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ultimate Calculator</title>
   <style>
     body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: url('https://media.giphy.com/media/xTiTntVx3E5U3rYv0Q/giphy.gif') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
+      padding: 0;
+      background: linear-gradient(to bottom right, #1a1a2e, #16213e);
+      color: white;
       text-align: center;
     }
     h1 {
-      font-size: 3rem;
-      text-shadow: 2px 2px 5px #000;
-      margin-top: 2rem;
+      font-size: 4rem;
+      margin-top: 20px;
+      text-shadow: 2px 2px #000;
     }
     .menu {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 3rem;
+      margin-top: 40px;
     }
     button {
-      padding: 1rem 2rem;
       font-size: 1.2rem;
+      padding: 10px 20px;
+      margin: 10px;
       border: none;
-      border-radius: 12px;
-      background-color: #111;
-      color: #0f0;
-      box-shadow: 0 0 15px #0f0;
+      border-radius: 10px;
+      background-color: #0f3460;
+      color: white;
       cursor: pointer;
-      transition: all 0.2s ease-in-out;
+      transition: background-color 0.3s;
     }
     button:hover {
-      background-color: #222;
-      transform: scale(1.05);
+      background-color: #e94560;
     }
-    .section {
-      display: none;
-      margin-top: 2rem;
+    #output {
+      margin-top: 30px;
+      font-size: 1.5rem;
+      white-space: pre-wrap;
     }
-    .back {
-      margin-top: 2rem;
-      cursor: pointer;
-      color: #ff0;
-      text-decoration: underline;
-    }
-    textarea, input {
-      font-size: 1rem;
-      margin-top: 1rem;
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      opacity: 0.1;
+      background: url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center/cover no-repeat;
     }
   </style>
 </head>
+
 <body>
-  <h1>🔥 CALCULATOR 🔥</h1>
+  <div class="background"></div>
+  <h1>ULTIMATE CALCULATOR</h1>
   <div class="menu">
-    <button onclick="showSection('calc')">🧠 Calculator</button>
-    <button onclick="showSection('minigames')">🎮 Minigames</button>
-    <button onclick="showSection('bossfight')">⚔️ Boss Fight</button>
-    <button onclick="showSection('about')">👤 About Creator</button>
+    <button onclick="showCalculator()">🧮 Calculator</button>
+    <button onclick="startBossFight()">⚔️ Boss Fight</button>
+    <button onclick="showMinigames()">🎮 Minigames</button>
+    <button onclick="showAbout()">ℹ️ About</button>
   </div>
 
-  <div id="calc" class="section">
-    <h2>🧠 Advanced Calculator</h2>
-    <input id="expr" placeholder="e.g., 2+2 or sin(30)" />
-    <br />
-    <button onclick="calculate()">Calculate</button>
-    <p id="result"></p>
-    <div class="back" onclick="goBack()">⬅️ Go Back</div>
-  </div>
-
-  <div id="minigames" class="section">
-    <h2>🎮 Minigames (10 Coming Up!)</h2>
-    <p>👇 Choose a minigame:</p>
-    <button onclick="alert('Quick Math not yet implemented')">Quick Math</button>
-    <button onclick="alert('Memory Flip not yet implemented')">Memory Flip</button>
-    <button onclick="alert('Click Speed not yet implemented')">Click Speed</button>
-    <button onclick="alert('Reaction Tester not yet implemented')">Reaction Tester</button>
-    <button onclick="alert('Dice Roller not yet implemented')">Dice Roller</button>
-    <button onclick="alert('Number Guesser not yet implemented')">Number Guesser</button>
-    <button onclick="alert('Match Shapes not yet implemented')">Match Shapes</button>
-    <button onclick="alert('Speed Tap not yet implemented')">Speed Tap</button>
-    <button onclick="alert('Typing Test not yet implemented')">Typing Test</button>
-    <button onclick="alert('Emoji Match not yet implemented')">Emoji Match</button>
-    <div class="back" onclick="goBack()">⬅️ Go Back</div>
-  </div>
-
-  <div id="bossfight" class="section">
-    <h2>⚔️ Boss Fight Mode</h2>
-    <p>Battle incoming... prepare your brain! (coming soon)</p>
-    <div class="back" onclick="goBack()">⬅️ Go Back</div>
-  </div>
-
-  <div id="about" class="section">
-    <h2>👤 About Abhyudaya Kapoor</h2>
-    <p>
-      Abhyudaya Kapoor is an 11-year-old innovator born on 16th August 2013.<br />
-      A YouTuber, gamer, part-time coder, and karate gold medalist 🥋.<br />
-      Known for crushing International Benchmark Tests and flexing his brain 🧠.<br />
-      With seniority as a blue belt in WSKF Bahrain, he’s a legend in the making.
-    </p>
-    <div class="back" onclick="goBack()">⬅️ Go Back</div>
-  </div>
+  <div id="output"></div>
 
   <script>
-    function showSection(id) {
-      document.querySelectorAll('.section').forEach((sec) => (sec.style.display = 'none'));
-      document.getElementById(id).style.display = 'block';
+    function showCalculator() {
+      const x = prompt("Enter first number:");
+      const y = prompt("Enter second number:");
+      const op = prompt("Choose operation (+, -, *, /):");
+      let res;
+      if (op === '+') res = +x + +y;
+      else if (op === '-') res = x - y;
+      else if (op === '*') res = x * y;
+      else if (op === '/') res = y == 0 ? 'Bruh no zero division 💀' : x / y;
+      else res = 'Invalid op fam';
+      document.getElementById("output").innerText = `Result: ${res}`;
     }
 
-    function goBack() {
-      document.querySelectorAll('.section').forEach((sec) => (sec.style.display = 'none'));
-    }
+    function startBossFight() {
+      let hp = 100;
+      let bossHp = 150;
+      let log = `👾 Boss Fight Started!\nYou (❤️ ${hp}) VS Boss (💀 ${bossHp})\n`;
+      while (hp > 0 && bossHp > 0) {
+        const move = prompt("Choose your move: punch / heal / blast");
+        let dmg = 0;
+        if (move === 'punch') dmg = 15;
+        else if (move === 'blast') dmg = 30;
+        else if (move === 'heal') { hp += 20; log += `You healed +20 ❤️\n`; continue; }
+        else { log += `You did nothing...\n`; continue; }
 
-    function calculate() {
-      try {
-        const expr = document.getElementById('expr').value;
-        const result = eval(expr.replace(/sin|cos|tan|sqrt/g, (match) => `Math.${match}`));
-        document.getElementById('result').textContent = '= ' + result;
-      } catch {
-        document.getElementById('result').textContent = 'Error ❌';
+        bossHp -= dmg;
+        log += `You dealt ${dmg} to Boss 💥\n`;
+
+        const bossDmg = Math.floor(Math.random() * 20) + 5;
+        hp -= bossDmg;
+        log += `Boss smacked you for ${bossDmg} 💢\nYou (❤️ ${hp}) | Boss (💀 ${bossHp})\n`;
       }
+      if (hp <= 0) log += "😵 You lost bruh... Try again!";
+      else log += "🔥 YOU WON! You the real sigma!";
+      document.getElementById("output").innerText = log;
+    }
+
+    function showMinigames() {
+      const game = prompt("Pick a Minigame: 1 = Guess Number, 2 = Clicker Game");
+      if (game === '1') {
+        const secret = Math.floor(Math.random() * 100) + 1;
+        let guess;
+        let tries = 0;
+        do {
+          guess = prompt("Guess a number between 1-100:");
+          guess = parseInt(guess);
+          tries++;
+          if (guess < secret) alert("Too low!");
+          else if (guess > secret) alert("Too high!");
+        } while (guess !== secret);
+        document.getElementById("output").innerText = `✅ You guessed it in ${tries} tries!`;
+      } else if (game === '2') {
+        let score = 0;
+        let clicks = prompt("Click 'ok' to score! Cancel to stop");
+        while (clicks !== null) {
+          score++;
+          clicks = prompt(`Score: ${score}\nClick 'ok' to score more!`);
+        }
+        document.getElementById("output").innerText = `🏆 Final Score: ${score}`;
+      } else {
+        document.getElementById("output").innerText = "🚫 Invalid game selected!";
+      }
+    }
+
+    function showAbout() {
+      const info = `About the Creator 🤖\n\nAbhyudaya Kapoor is an 11-year-old prodigy born on 16th August 2013. He is a passionate YouTuber, gamer, and part-time coder who is known for his creative mind and love for technology.\n\nHe's participated in multiple International Benchmark Tests (IBTs), received countless awards, and currently holds a blue belt in karate with a gold medal from the WSKF Bahrain Championship.\n\nThis entire project was crafted by Abhyudaya with love and dedication to make learning and fun go hand in hand.`;
+      document.getElementById("output").innerText = info;
     }
   </script>
 </body>
+
 </html>
