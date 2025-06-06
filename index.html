@@ -1,398 +1,161 @@
-import json
-import os
 import random
 import time
-import pyttsx3
 
-# ====== UTILS ======
-def clear_screen():
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-def slow_print(text, delay=0.03):
-    for char in text:
-        print(char, end='', flush=True)
-        time.sleep(delay)
-    print()
-
-def input_number(prompt, allow_float=True):
-    while True:
-        val = input(prompt)
-        try:
-            return float(val) if allow_float else int(val)
-        except:
-            print("Yo that ain't a number, try again 🤡")
-
-def press_enter_to_continue():
-    input("\nPress Enter to go back...")
-
-# ====== VOICE MODE SETUP ======
-engine = pyttsx3.init()
-voice_mode = False  # Default OFF
-
-def speak(text):
-    if voice_mode:
-        engine.say(text)
-        engine.runAndWait()
-
-# ====== PROFILE HANDLING ======
-PROFILE_FILE = 'user_profile.json'
-
-default_profile = {
-    "username": "",
-    "xp": 0,
-    "games_played": 0,
-    "boss_wins": 0,
-    "minigames_won": 0
-}
-
-def load_profile():
-    if os.path.exists(PROFILE_FILE):
-        with open(PROFILE_FILE, 'r') as f:
-            return json.load(f)
-    else:
-        return default_profile.copy()
-
-def save_profile(profile):
-    with open(PROFILE_FILE, 'w') as f:
-        json.dump(profile, f, indent=4)
-
-profile = load_profile()
-
-# ====== ABOUT SECTION ======
-ABOUT_TEXT = """
-Abhyudaya Kapoor is a young boy, 11 years old, born on 16th August 2013.
-He is a YouTuber, gamer, and part-time coder, known for his smarts at school and
-participating in International Benchmark Tests (IBT). He's earned multiple awards
-at school and holds a blue belt in karate with respect and seniority. Abhyudaya
-is also a gold medalist in the WSKF Bahrain Karate Championship.
-
-Keep shining, Abhi! 🌟
-"""
-
-# ====== PIXEL FONT & STYLING (simple simulation) ======
-def styled_title():
-    print(r"""
-  ____      _            _       _             
- |  _ \ ___| | ___   ___| | __ _| |_ ___  _ __ 
- | |_) / _ \ |/ _ \ / __| |/ _` | __/ _ \| '__|
- |  __/  __/ | (_) | (__| | (_| | || (_) | |   
- |_|   \___|_|\___/ \___|_|\__,_|\__\___/|_|   
-    """)
-    print("              THE ULTIMATE PYTHON CALCULATOR\n")
-
-# ====== CALCULATOR FUNCTIONS ======
-def add(x, y): return x + y
-def subtract(x, y): return x - y
-def multiply(x, y): return x * y
-def divide(x, y):
-    if y == 0: return "Bruh you can't divide by zero 💀"
-    return x / y
-
-calc_history = []
-
-def calculator():
-    clear_screen()
-    slow_print("Welcome to the Advanced Calculator! ⚡")
-    while True:
-        print("\nChoose an operation:")
-        print("1 ➕ Add")
-        print("2 ➖ Subtract")
-        print("3 ✖ Multiply")
-        print("4 ➗ Divide")
-        print("5 📝 View History")
-        print("6 🔙 Go Back")
-
-        choice = input("Your pick: ")
-
-        if choice == '6':
-            break
-        elif choice == '5':
-            clear_screen()
-            if not calc_history:
-                print("No history yet 🤷‍♂️")
-            else:
-                print("=== History ===")
-                for i, entry in enumerate(calc_history, 1):
-                    print(f"{i}. {entry}")
-            press_enter_to_continue()
-            clear_screen()
-            continue
-
-        if choice not in ['1', '2', '3', '4']:
-            print("Invalid choice, try again.")
-            continue
-
-        num1 = input_number("First number: ")
-        num2 = input_number("Second number: ")
-
-        if choice == '1':
-            res = add(num1, num2)
-            op = '+'
-        elif choice == '2':
-            res = subtract(num1, num2)
-            op = '-'
-        elif choice == '3':
-            res = multiply(num1, num2)
-            op = '*'
-        elif choice == '4':
-            res = divide(num1, num2)
-            op = '/'
-
-        calc_history.append(f"{num1} {op} {num2} = {res}")
-        profile["xp"] += 5
-        profile["games_played"] += 1
-        save_profile(profile)
-
-        print(f"Result: {res}")
-        speak(f"The result is {res}")
-
-        press_enter_to_continue()
-        clear_screen()
-
-# ====== BOSS FIGHT MODE ======
-class BossFight:
-    def __init__(self):
-        self.player_hp = 100
-        self.boss_hp = 150
-
-    def player_attack(self):
-        damage = random.randint(15, 30)
-        self.boss_hp -= damage
-        slow_print(f"You hit the Boss for {damage} damage!")
-        speak(f"You hit the Boss for {damage} damage!")
-
-    def boss_attack(self):
-        damage = random.randint(10, 25)
-        self.player_hp -= damage
-        slow_print(f"The Boss attacks and hits you for {damage} damage!")
-        speak(f"The Boss attacks and hits you for {damage} damage!")
-
-    def fight(self):
-        clear_screen()
-        slow_print("Boss Fight Initiated! 🥊", 0.05)
-        while self.player_hp > 0 and self.boss_hp > 0:
-            print(f"\nYour HP: {self.player_hp}  |  Boss HP: {self.boss_hp}")
-            print("Choose your move:")
-            print("1. Attack")
-            print("2. Heal (+20 HP)")
-            print("3. Run (Give up)")
-
-            choice = input("Pick: ")
-            if choice == '1':
-                self.player_attack()
-                if self.boss_hp <= 0:
-                    slow_print("You defeated the Boss! 🎉")
-                    profile["boss_wins"] += 1
-                    profile["xp"] += 50
-                    save_profile(profile)
-                    break
-                self.boss_attack()
-            elif choice == '2':
-                heal = random.randint(10, 20)
-                self.player_hp = min(self.player_hp + heal, 100)
-                slow_print(f"You healed {heal} HP!")
-                self.boss_attack()
-            elif choice == '3':
-                slow_print("You ran away... Coward! 🐔")
-                break
-            else:
-                print("Not a valid option.")
-
-            if self.player_hp <= 0:
-                slow_print("You were defeated by the Boss... Try again!")
-                break
-
-            time.sleep(1)
-
-        press_enter_to_continue()
-
-def boss_fight_mode():
-    boss = BossFight()
-    boss.fight()
-
-# ====== MINIGAMES ======
-def minigame_guess_number():
-    clear_screen()
-    slow_print("Welcome to Guess The Number! 🤫")
-    target = random.randint(1, 50)
-    attempts = 5
-    while attempts > 0:
-        guess = input_number(f"Guess a number between 1 and 50 ({attempts} tries left): ", False)
-        if guess == target:
-            slow_print("You guessed it! You win! 🎉")
-            profile["minigames_won"] += 1
-            profile["xp"] += 20
-            save_profile(profile)
-            break
-        elif guess < target:
-            print("Too low!")
+def play_tic_tac_toe():
+    board = [" "] * 9
+    current = "X"
+    def print_board():
+        print(f"\n {board[0]} | {board[1]} | {board[2]} ")
+        print("---+---+---")
+        print(f" {board[3]} | {board[4]} | {board[5]} ")
+        print("---+---+---")
+        print(f" {board[6]} | {board[7]} | {board[8]} \n")
+    def check_win():
+        wins = [(0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6)]
+        return any(board[a]==board[b]==board[c]==current for a,b,c in wins)
+    for _ in range(9):
+        print_board()
+        move = int(input(f"{current}'s move (0-8): "))
+        if board[move] == " ":
+            board[move] = current
+            if check_win():
+                print_board()
+                print(f"{current} wins!")
+                return
+            current = "O" if current == "X" else "X"
         else:
-            print("Too high!")
-        attempts -= 1
-    else:
-        print(f"You lost! The number was {target}.")
-    press_enter_to_continue()
+            print("Spot taken, try again!")
+    print_board()
+    print("Draw!")
 
-def minigame_rock_paper_scissors():
-    clear_screen()
-    slow_print("Rock Paper Scissors! 🤜🤛")
-    choices = ['rock', 'paper', 'scissors']
-    wins = 0
-    for _ in range(3):
-        user = input("Choose rock, paper or scissors: ").lower()
-        if user not in choices:
-            print("Invalid choice!")
-            continue
-        comp = random.choice(choices)
-        print(f"Computer chose {comp}")
-        if user == comp:
-            print("Draw!")
-        elif (user == 'rock' and comp == 'scissors') or (user == 'paper' and comp == 'rock') or (user == 'scissors' and comp == 'paper'):
-            print("You win this round!")
-            wins += 1
-        else:
-            print("You lose this round!")
-    if wins >= 2:
-        slow_print("You won the match! 🎉")
-        profile["minigames_won"] += 1
-        profile["xp"] += 20
-        save_profile(profile)
-    else:
-        slow_print("You lost the match... 😢")
-    press_enter_to_continue()
+def guess_the_number():
+    num = random.randint(1, 100)
+    tries = 7
+    while tries > 0:
+        guess = int(input(f"Guess (1-100), {tries} tries left: "))
+        if guess == num:
+            print("You got it!")
+            return
+        print("Too low!" if guess < num else "Too high!")
+        tries -= 1
+    print(f"Out of tries! Number was {num}")
 
-def minigame_math_quiz():
-    clear_screen()
-    slow_print("Math Quiz! 🧠")
+def coin_flip():
+    guess = input("Heads or Tails? (h/t): ").lower()
+    flip = random.choice(['h', 't'])
+    print("It was", "Heads" if flip == 'h' else "Tails")
+    print("You win!" if guess == flip else "You lose!")
+
+def rock_paper_scissors():
+    user = input("Rock, paper, or scissors? ").lower()
+    bot = random.choice(['rock', 'paper', 'scissors'])
+    print(f"Bot chose {bot}")
+    if user == bot:
+        print("Draw!")
+    elif (user == 'rock' and bot == 'scissors') or (user == 'paper' and bot == 'rock') or (user == 'scissors' and bot == 'paper'):
+        print("You win!")
+    else:
+        print("You lose!")
+
+def math_quiz():
     score = 0
     for i in range(5):
-        a = random.randint(1, 20)
-        b = random.randint(1, 20)
-        op = random.choice(['+', '-', '*'])
-        if op == '+':
-            correct = a + b
-        elif op == '-':
-            correct = a - b
-        else:
-            correct = a * b
-        ans = input_number(f"Question {i+1}: {a} {op} {b} = ", False)
-        if ans == correct:
+        a, b = random.randint(1,10), random.randint(1,10)
+        ans = int(input(f"{a} + {b} = "))
+        if ans == a + b:
             print("Correct!")
             score += 1
         else:
-            print(f"Wrong! The answer was {correct}.")
-    slow_print(f"Quiz over! You scored {score}/5")
-    if score >= 3:
-        profile["minigames_won"] += 1
-        profile["xp"] += 20
-        save_profile(profile)
-    press_enter_to_continue()
+            print("Wrong!")
+    print(f"Score: {score}/5")
 
-# Dummy placeholders for the rest of the 10 minigames
-def minigame_placeholder(num):
-    clear_screen()
-    slow_print(f"Minigame #{num} coming soon! Stay tuned 👀")
-    press_enter_to_continue()
+def word_scramble():
+    words = ['python', 'sigma', 'mega', 'banana', 'fun']
+    word = random.choice(words)
+    scrambled = ''.join(random.sample(word, len(word)))
+    guess = input(f"Unscramble: {scrambled} → ")
+    print("Correct!" if guess.lower() == word else f"Nah, it was {word}")
 
-minigames = [
-    minigame_guess_number,
-    minigame_rock_paper_scissors,
-    minigame_math_quiz,
-    lambda: minigame_placeholder(4),
-    lambda: minigame_placeholder(5),
-    lambda: minigame_placeholder(6),
-    lambda: minigame_placeholder(7),
-    lambda: minigame_placeholder(8),
-    lambda: minigame_placeholder(9),
-    lambda: minigame_placeholder(10)
-]
+def snake_sim():
+    print("🐍 Simulating snake... Coming soon!")
+
+def reaction_time():
+    print("Wait for it...")
+    time.sleep(random.randint(2,5))
+    start = time.time()
+    input("NOW! Press enter! ")
+    end = time.time()
+    print(f"Reaction time: {round(end - start, 3)}s")
+
+def hangman():
+    words = ['banana', 'python', 'hamburger']
+    word = random.choice(words)
+    display = ['_'] * len(word)
+    tries = 6
+    guessed = []
+    while tries > 0 and '_' in display:
+        print(' '.join(display))
+        guess = input("Guess a letter: ").lower()
+        if guess in guessed:
+            print("Already guessed!")
+            continue
+        guessed.append(guess)
+        if guess in word:
+            for i, letter in enumerate(word):
+                if letter == guess:
+                    display[i] = guess
+        else:
+            tries -= 1
+            print(f"Wrong! {tries} tries left.")
+    if '_' not in display:
+        print("You won!", word)
+    else:
+        print("You lost! Word was:", word)
+
+def even_odd_challenge():
+    for _ in range(5):
+        num = random.randint(1, 100)
+        ans = input(f"Is {num} even or odd? (e/o): ").lower()
+        correct = 'e' if num % 2 == 0 else 'o'
+        print("Correct!" if ans == correct else f"Nope! It's {'even' if correct == 'e' else 'odd'}")
 
 def minigames_menu():
     while True:
-        clear_screen()
-        slow_print("MINIGAMES GALORE 🎮 Pick one:")
-        for i in range(10):
-            print(f"{i+1}. Minigame {i+1}")
-        print("0. Go back")
-        choice = input("Your choice: ")
-        if choice == '0':
-            break
-        if choice.isdigit() and 1 <= int(choice) <= 10:
-            minigames[int(choice)-1]()
-        else:
-            print("Invalid input, try again.")
-            time.sleep(1)
-
-# ====== MAIN MENU ======
-def toggle_voice_mode():
-    global voice_mode
-    voice_mode = not voice_mode
-    print("Voice mode is now", "ON 🔊" if voice_mode else "OFF 🔇")
-    time.sleep(1)
-
-def about_screen():
-    clear_screen()
-    slow_print("ABOUT THE CREATOR\n")
-    slow_print(ABOUT_TEXT, 0.01)
-    press_enter_to_continue()
-
-def save_load_menu():
-    clear_screen()
-    print("Save/Load Profile")
-    print(f"Current profile username: {profile.get('username', '')}")
-    print("1. Change username")
-    print("2. Reset profile")
-    print("3. Go back")
-    choice = input("Pick: ")
-    if choice == '1':
-        new_name = input("Enter new username: ").strip()
-        if new_name:
-            profile['username'] = new_name
-            save_profile(profile)
-            print("Username saved!")
-    elif choice == '2':
-        confirm = input("Reset your profile? All progress lost! (y/n): ").lower()
-        if confirm == 'y':
-            global profile
-            profile = default_profile.copy()
-            save_profile(profile)
-            print("Profile reset!")
-    time.sleep(2)
-
-def main_menu():
-    while True:
-        clear_screen()
-        styled_title()
-        print(f"User: {profile.get('username', 'Guest')} | XP: {profile.get('xp',0)} | Games Won: {profile.get('minigames_won',0)}")
-        print("\nChoose your adventure:")
-        print("1. Calculator")
-        print("2. Boss Fight")
-        print("3. Minigames")
-        print("4. About")
-        print("5. Voice Mode Toggle")
-        print("6. Profile Settings")
-        print("0. Exit")
-
-        choice = input("Pick: ")
-
-        if choice == '0':
-            slow_print("Thanks for playing! Catch you later 👋")
-            break
-        elif choice == '1':
-            calculator()
+        print("""\n🎮 MINIGAMES MENU 🎮
+1. Tic Tac Toe
+2. Guess the Number
+3. Coin Flip
+4. Rock Paper Scissors
+5. Math Quiz
+6. Word Scramble
+7. Snake Sim
+8. Reaction Time
+9. Hangman
+10. Even/Odd Challenge
+0. Back to Main Menu
+""")
+        choice = input("Pick a game (0-10): ")
+        if choice == '1':
+            play_tic_tac_toe()
         elif choice == '2':
-            boss_fight_mode()
+            guess_the_number()
         elif choice == '3':
-            minigames_menu()
+            coin_flip()
         elif choice == '4':
-            about_screen()
+            rock_paper_scissors()
         elif choice == '5':
-            toggle_voice_mode()
+            math_quiz()
         elif choice == '6':
-            save_load_menu()
+            word_scramble()
+        elif choice == '7':
+            snake_sim()
+        elif choice == '8':
+            reaction_time()
+        elif choice == '9':
+            hangman()
+        elif choice == '10':
+            even_odd_challenge()
+        elif choice == '0':
+            break
         else:
-            print("Try again, that choice ain't valid 😵‍💫")
-            time.sleep(1)
-
-if __name__ == '__main__':
-    main_menu()
+            print("🚫 Invalid choice.")
